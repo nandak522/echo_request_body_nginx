@@ -32,12 +32,9 @@ RUN CONFARGS=$(nginx -V 2>&1 | sed -n -e 's/^.*arguments: //p') \
   ECHOREQUESTDIR="/echo-nginx-module-${ECHO_REQUEST_VERSION}" && \
   cd /usr/local/nginx-${NGINX_VERSION} && \
   ./configure --with-compat ${CONFARGS} --add-dynamic-module=${ECHOREQUESTDIR} && \
-  make -j2 && make install
-
-RUN rm /etc/nginx/conf.d/default.conf
+  make -j2 && make install && rm /etc/nginx/conf.d/default.conf
 
 COPY nginx.conf /etc/nginx/nginx.conf
 EXPOSE 80
 STOPSIGNAL SIGTERM
-RUN nginx -V
 CMD ["nginx", "-g", "daemon off;"]
